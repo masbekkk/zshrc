@@ -1,0 +1,126 @@
+# XAMPP PHP path (make sure this comes first)
+export PATH="/Applications/XAMPP/bin:$PATH"
+
+# Homebrew path (without PHP, since you want to use XAMPP's PHP)
+export PATH=/opt/homebrew/bin:$PATH
+
+# NVM for Node.js
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# General system paths
+export PATH=/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
+
+# Apple security cryptexd paths
+export PATH=/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:$PATH
+export PATH=/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:$PATH
+export PATH=/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:$PATH
+
+# Apple user binaries
+export PATH=/Library/Apple/usr/bin:$PATH
+
+# Node.js path
+export PATH=/Users/masbekmacpro_m2/.nvm/versions/node/v19.8.1/bin:$PATH
+
+# Flutter path
+export PATH=/Applications/flutter/bin:$PATH
+
+# Go path
+export PATH="/usr/local/go/bin:$PATH"
+
+# PHP (switched to XAMPP PHP)
+# Ensure any other PHP paths are commented out.
+# export PATH=/opt/homebrew/bin/php:$PATH  # Commented out Homebrew PHP
+
+# Herd injected PHP 8.3 configuration (if needed)
+# export HERD_PHP_83_INI_SCAN_DIR="/Users/masbekmacpro_m2/Library/Application Support/Herd/config/php/83/"
+
+# Herd injected PHP binary.
+# export PATH="/Users/masbekmacpro_m2/Library/Application Support/Herd/bin/":$PATH
+
+
+alias htd='cd /Applications/XAMPP/xamppfiles/htdocs'
+alias gs='./GoSungrow'
+alias load='source ~/.zshrc'
+alias zsh='cat ~/.zshrc'
+alias lri='composer create-project --prefer-dist laravel/laravel'
+alias lr='php artisan optimize:clear && php artisan serve'
+alias oc='php artisan optimize:clear'
+alias mgr='php artisan migrate'
+alias dbs='php artisan db:seed'
+alias mgrs='php artisan migrate --seed'
+alias mgrsf='php artisan migrate:fresh --seed'
+function scr() {
+   php artisan make:seeder "${*}Seeder"
+}
+
+function ctcr() {
+   php artisan make:controller "${*}Controller"
+}
+function mcr() {
+   php artisan make:mode "${*}" -mcr
+}
+function mmgc() {
+   php artisan make:migration "add_${1}_to_${2}_table"
+}
+
+alias rsvp_s='php artisan db:seed --class=ResendQrRsvpByStepper'
+alias rsvp_d='php artisan db:seed --class=ResendQrRsvpByDay'
+alias ndev='npm run dev'
+alias nb='npm run build'
+function gf() {
+    git fetch
+}
+function gcmsg() {
+    git commit -am "$*"
+}
+function gpmsg() {
+    # Get the current branch
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    git commit -am "$*" && git push -u origin "$current_branch"
+}
+function gpfmsg() {
+    # Generate a commit message from the changed files
+    commit_message=$(git status --short | awk '{print $2}' | tr '\n' ' ')
+
+    # Get the current branch
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+    # Commit and push with auto-generated message
+    git commit -am "$commit_message" && git push -u origin "$current_branch"
+}
+function gsb() {
+   git switch "$*"
+}
+function gsbp() {
+   git switch "$*" && git pull origin "$*"
+}
+function gco() {
+   git checkout -b "$*"
+}
+function gpl() {
+   # Get the current branch
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    git pull origin "$current_branch"
+}
+function undocommit() {
+    # Get the current branch
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    git pull origin "$current_branch"
+    git reset --hard HEAD~1
+}
+function pf() {
+  git push --force
+}
+function gstat() {
+  git status
+}
+function grv() {
+  git remote -v
+}
+
+
+
+
+
