@@ -1,3 +1,6 @@
+# import environtment variable from .env file
+export $(grep -v '^#' ~/.env | xargs)
+
 # XAMPP PHP path (make sure this comes first)
 export PATH="/Applications/XAMPP/bin:$PATH"
 
@@ -59,7 +62,7 @@ function ctcr() {
    php artisan make:controller "${*}Controller"
 }
 function mcr() {
-   php artisan make:mode "${*}" -mcr
+   php artisan make:model "${*}" -mcr
 }
 function mmgc() {
    php artisan make:migration "add_${1}_to_${2}_table"
@@ -99,6 +102,9 @@ function gsbp() {
 function gco() {
    git checkout -b "$*"
 }
+function gcoc() {
+   git checkout "$*"
+}
 function gpl() {
    # Get the current branch
     current_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -119,8 +125,36 @@ function gstat() {
 function grv() {
   git remote -v
 }
+function gsp() {
+if [ -z "$1" ]; then
+        echo "Usage: get_repo_size <owner/repo>"
+        return 1
+    fi
 
+    local repo=$1
 
+    if [ -z "$GITHUB_TOKEN" ]; then
+        echo "Error: GITHUB_TOKEN is not set. Please check your .env file."
+        return 1
+    fi
+
+    response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/$repo)
+
+    if echo "$response" | grep -q '"message": "Not Found"'; then
+        echo "Repository not found or you don't have access."
+        return 1
+    fi
+
+    size_kb=$(echo "$response" | grep '"size":' | awk '{print $2}' | tr -d ',')
+    size_mb=$(echo "scale=2; $size_kb / 1024" | bc)
+    size_gb=$(echo "scale=2; $size_mb / 1024" | bc)
+
+    echo "Repository Size for $repo:"
+    echo "- $size_kb KB"
+    echo "- $size_mb MB"
+    echo "- $size_gb GB"
+
+}
 
 
 
