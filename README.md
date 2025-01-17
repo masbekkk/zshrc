@@ -28,7 +28,7 @@ A repository for sharing and managing configurations for the `.zshrc` file. This
 ### 1. Clone the Repository
 To get started, clone the repository to your local machine:
 ```bash
-git clone https://github.com/<your-username>/zshrc.git
+git clone https://github.com/masbekkk/zshrc.git
 cd zshrc
 ```
 
