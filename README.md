@@ -63,47 +63,74 @@ cd zshrc
 ### 🛠 Environment Variable Support
 Manage sensitive tokens and API keys securely using an `.env` file, sourced in your shell configuration.
 
-### ⚡️ Custom Functions
-Includes useful shell functions like:
-- **Fetching GitHub repository sizes**:
-  ```bash
-  function get_repo_size() {
-      if [ -z "$1" ]; then
-          echo "Usage: get_repo_size <owner/repo>"
-          return 1
-      fi
+### ⚡️ Preconfigured Aliases
+The `dotzshrc.txt` includes the following aliases to streamline your workflow:
 
-      local repo=$1
+- Reload `.zshrc`: `alias load='source ~/.zshrc'`
+- Laravel-specific commands:
+  - `lri`: Create a new Laravel project.
+  - `lr`: Clear Laravel cache and start the server.
+  - `oc`: Clear Laravel cache.
+  - `mgr`: Run migrations.
+  - `dbs`: Seed the database.
+  - `mgrs`: Run migrations with seeding.
+  - `mgrsf`: Fresh migrations with seeding.
 
-      if [ -z "$GITHUB_TOKEN" ]; then
-          echo "Error: GITHUB_TOKEN is not set. Please check your .env file."
-          return 1
-      fi
+### 🔧 Custom Functions
+Custom functions for Laravel, Git, and more:
+- **Laravel Commands**:
+  - Create a seeder: `scr "SeederName"`
+  - Create a controller: `ctcr "ControllerName"`
+  - Create a model with migration, controller, and resource: `mcr "ModelName"`
+  - Add a column via migration: `mmgc "column_name" "table_name"`
 
-      response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/$repo)
+- **Git Utilities**:
+  - Fetch changes: `gf`
+  - Commit with a message: `gcmsg "commit message"`
+  - Commit and push with a message: `gpmsg "commit message"`
+  - Push changes forcefully: `pf`
+  - Undo the last commit: `undocommit`
+  - Switch branches: `gsb "branch_name"`
+  - Switch and pull: `gsbp "branch_name"`
+  - Check the repository status: `gstat`
+  - View remotes: `grv`
+  - Get repository size: `gsp <owner/repo>`
 
-      if echo "$response" | grep -q '"message": "Not Found"'; then
-          echo "Repository not found or you don't have access."
-          return 1
-      fi
+---
 
-      size_kb=$(echo "$response" | grep '"size":' | awk '{print $2}' | tr -d ',')
-      size_mb=$(echo "scale=2; $size_kb / 1024" | bc)
-      size_gb=$(echo "scale=2; $size_mb / 1024" | bc)
+## Example: Fetching GitHub Repository Size
+The `gsp` function fetches and calculates the size of a GitHub repository:
+```bash
+function gsp() {
+    if [ -z "$1" ]; then
+        echo "Usage: gsp <owner/repo>"
+        return 1
+    fi
 
-      echo "Repository Size for $repo:"
-      echo "- $size_kb KB"
-      echo "- $size_mb MB"
-      echo "- $size_gb GB"
-  }
-  ```
+    local repo=$1
 
-### 🔗 Aliases
-- Simplify your daily shell commands with pre-configured aliases in the `.zshrc` file:
-  ```bash
-  alias gf="git fetch"
-  alias gs="git status"
-  ```
+    if [ -z "$GITHUB_TOKEN" ]; then
+        echo "Error: GITHUB_TOKEN is not set. Please check your .env file."
+        return 1
+    fi
+
+    response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/$repo)
+
+    if echo "$response" | grep -q '"message": "Not Found"'; then
+        echo "Repository not found or you don't have access."
+        return 1
+    fi
+
+    size_kb=$(echo "$response" | grep '"size":' | awk '{print $2}' | tr -d ',')
+    size_mb=$(echo "scale=2; $size_kb / 1024" | bc)
+    size_gb=$(echo "scale=2; $size_mb / 1024" | bc)
+
+    echo "Repository Size for $repo:"
+    echo "- $size_kb KB"
+    echo "- $size_mb MB"
+    echo "- $size_gb GB"
+}
+```
 
 ---
 
